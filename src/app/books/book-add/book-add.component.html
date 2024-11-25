@@ -1,0 +1,20 @@
+<div class="container mt-5 p-4 bg-light rounded shadow">
+  <h1 class="text-center text-primary mb-4">Ajouter un livre</h1>
+  <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <div *ngIf="f.invalid && f.dirty" class="alert alert-danger">Veuillez remplir tous les champs</div>
+    <div class="mb-3">
+      <label for="title" class="form-label">Titre</label>
+      <input type="text" class="form-control border-primary" id="title" name="title" required ngModel #title>
+    </div>
+    <div class="mb-3">
+      <label for="author" class="form-label">Auteur</label>
+      <input type="text" class="form-control border-success" id="author" name="author" required ngModel #author>
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Prix</label>
+      <input type="number" class="form-control border-warning" id="price" name="price" required ngModel #price>
+    </div>
+    <button type="submit" class="btn btn-primary w-100" [disabled]="f.invalid">Ajouter</button>
+    <span class="text-muted d-block mt-2">* : champs obligatoire</span>
+  </form>
+</div>

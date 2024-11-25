@@ -1,0 +1,40 @@
+<!--1er type de binding : interpolation-->
+
+<!--2eme type de binding : event binding-->
+<div class="text-center">
+  <button 
+    class="btn btn-success mb-3" 
+    routerLink="/books/add"
+  >Ajouter un livre</button>
+</div>
+<!--Affichage conditionnel : directive *ngIf (version < 17) et @if (à partir de la version 17) -->
+
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Titre</th>
+      <th scope="col">Auteur</th>
+      <th scope="col">Prix</th>
+      <th scope="col">Editer</th>
+      <th scope="col">Supprimer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!--Affiche en boucle : Directive ngFor (avant la version 17) ou @for (à partie de la version 17)-->
+    @for (book of books; track $index) {
+      <tr>
+        <th scope="row">{{book.id}}</th>
+        <td>{{book.title}}</td>
+        <td>{{book.author}}</td>
+        <td>{{book.price}}</td>
+        <td>
+          <button class="btn btn-primary" [routerLink]="['/books/edit', book.id]">Editer</button>
+        </td>
+        <td>
+          <button class="btn btn-danger" (click)="deleteBook(book.id)">Supprimer</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
