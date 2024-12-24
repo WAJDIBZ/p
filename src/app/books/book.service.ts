@@ -1,42 +1,75 @@
 import { Injectable } from '@angular/core';
 import { Book } from './book';
+import { Observable, Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
-  private books: Book[] = [
-    new Book(1, 'Book 1', 'Author 1', 100),
-    new Book(2, 'Book 2', 'Author 2', 200),
-    new Book(3, 'Book 3', 'Author 3', 300),
-    new Book(4, 'Book 4', 'Author 4', 400),
-    new Book(5, 'Book 5', 'Author 5', 500),
-  ];
 
-  
+  private books = [];
+  private baseURL = "http://localhost:3000/books";
+  private options = {
+    headers : new HttpHeaders(
+    {
+      'content-type' : "application/json"
+    }
+    )
+  }
 
-  constructor() { }
-  getBooks(): Book[] {
-    return [...this.books];}
-    addBook(title:string,author:string,price:number): void {
-      const book = new Book(this.books.length + 1, title, author, price);
-      this.books = [...this.books, book];
-    }
-  
-    deleteBook(id: number): void {
-      confirm('Are you sure you want to delete this book?');
+  booksEdited = new Subject<Book[]>();
 
-      this.books = this.books.filter(book => book.id !== id);
-    
-    }
-    getBookById(id: number): Book {
-      return this.books.find(book => book.id === id)!;
-    }
-    updateBook(updatedBook: Book): void {
-      this.books = this.books.map(book => {
-        if (book.id === updatedBook.id) {
-          return updatedBook;
-        }
-        return book;
-      });
-    }
+  constructor(private httpClient : HttpClient) { }
+
+  getBooks() : Observable<Book[]>{
+    //return [...this.books];
+    return this.httpClient.get<Book[]>(this.baseURL);
+  }
+
+  addBook(title : string, author : string, price : number): Observable<Book>{
+    /*const newBook = new Book(
+      this.books[this.books.length - 1].id + 1,
+      title,
+      author,
+      price
+    );
+    this.books = [...this.books, newBook]*/
+    return this.httpClient.post<Book>(
+      this.baseURL,
+      JSON.stringify({
+        title : title,
+        author : author,
+        price : price
+      }),
+      this.options
+      )
+  }
+
+  getBookById(id: number) : Observable<Book>{
+    //return this.books.find(book=>book.id === id)
+    return this.httpClient.get<Book>(this.baseURL+"/"+id);
+  }
+
+  editBook(book : Book) : Observable<Book>{
+    /*this.books = this.books.map(
+      b=>b.id === book.id?book:b
+    )*/
+   return this.httpClient.put<Book>(
+    this.baseURL+"/"+book.id,
+    JSON.stringify({
+      title : book.title,
+      author : book.author,
+      price : book.price
+    }),
+    this.options
+    )
+  }
+
+  deleteBook(id : number):Observable<Book>{
+    /*this.books = this.books.filter(book=>book.id !== id);
+    //console.log(this.books);
+    this.booksEdited.next([...this.books]);*/
+    return this.httpClient.delete<Book>(this.baseURL+"/"+id)
+  }
 }

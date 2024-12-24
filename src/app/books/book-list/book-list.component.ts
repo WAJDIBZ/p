@@ -8,18 +8,23 @@ import { OnInit } from '@angular/core';
   styleUrl: './book-list.component.css'
 })
 export class BookListComponent implements OnInit {
-  books?: Book[];
+  books? : Book[];
 
-  constructor(private bookService: BookService) {}
+  constructor(protected bookService : BookService){}
+
+  deleteBook(id : number){
+    if(confirm("Êtes-vous sûre de vouloir supprimer ce livre?"))
+      this.bookService.deleteBook(id).subscribe(
+        bookDeleted => this.books = this.books?.filter(book=>book!.id !== bookDeleted.id)
+      )
+    //this.books = this.bookService.getBooks();
+  }
+
   ngOnInit(): void {
-    this.books = this.bookService.getBooks();
+    this.bookService.getBooks().subscribe(
+      books => this.books = books
+    );
+    
   }
-  deleteBook(id: number): void {
-    this.bookService.deleteBook(id);
-    this.books = this.bookService.getBooks();
-
-  
-  }
-
 
 }

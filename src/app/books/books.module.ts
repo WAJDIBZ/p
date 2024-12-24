@@ -5,6 +5,7 @@ import { BooksRoutingModule } from './books-routing.module';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookEditComponent } from './book-edit/book-edit.component';
 import { BookAddComponent } from './book-add/book-add.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -14,9 +15,12 @@ import { BookAddComponent } from './book-add/book-add.component';
     BookAddComponent
   ],
   imports: [
+    
     CommonModule,
     BooksRoutingModule,
-    FormsModule
+    FormsModule,
+    
+  
   ]
 })
 export class BooksModule { }

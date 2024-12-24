@@ -19,11 +19,10 @@ export class BookAddComponent {
 
   constructor(private bookService: BookService, private router: Router) {}
 
-  onSubmit(f : NgForm): void {
-    
-
-    this.bookService.addBook(f['controls']['title']['value'], f['controls']['author']['value'], f['controls']['price']['value']); 
-    this.router.navigate(['/']);
-    console.log(f);
+  onSubmit(f : NgForm){
+    //console.log(f);
+    this.bookService.addBook(f.value.title, f.value.author, +f.value.price).subscribe(
+      book => this.router.navigate(['/books'])
+    );
   }
 }
